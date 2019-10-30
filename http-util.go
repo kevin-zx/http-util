@@ -113,10 +113,7 @@ func doRequest(targetUrl string, headerMap map[string]string, method string, pos
 	method = strings.ToUpper(method)
 	var req *http.Request
 	var err error
-
 	if postData != nil && (method == "POST" || method == "PUT") {
-		//print(string(postData))
-
 		req, err = http.NewRequest(method, targetUrl, bytes.NewReader(postData))
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded; param=value")
 		if err != nil {
@@ -162,7 +159,6 @@ func ReadContentFromResponse(response *http.Response, charset string) (string, e
 		if err != nil {
 			return "", err
 		}
-
 		for {
 			buf := make([]byte, 1024)
 			n, err := gzreader.Read(buf)
@@ -197,11 +193,10 @@ func ReadContentFromResponse(response *http.Response, charset string) (string, e
 	}
 
 	dec := mahonia.NewDecoder(char)
-
-	preRd := dec.NewReader(data)
-	if preRd == nil {
-		return "", errors.New("读取头部文件为空")
+	if dec == nil {
+		dec = mahonia.NewDecoder("utf-8")
 	}
+	preRd := dec.NewReader(data)
 	preBytes, err := ioutil.ReadAll(preRd)
 	reBytes, err := ioutil.ReadAll(hreader)
 	if err != nil {
