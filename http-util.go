@@ -169,7 +169,7 @@ func ReadContentFromResponse(response *http.Response, charset string) (string, e
 			if n == 0 {
 				break
 			}
-			htmlbytes = append(htmlbytes, buf...)
+			htmlbytes = append(htmlbytes, buf[:n]...)
 		}
 		gzreader.Close()
 		//htmlbytes,err=ioutil.ReadAll(gzreader)
