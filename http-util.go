@@ -25,7 +25,7 @@ func GetWebConFromUrl(url string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return GetContentFromResponse(response)
+	return ReadContentFromResponse(response, "")
 }
 
 // get http.Response from url
@@ -115,10 +115,11 @@ func doRequest(targetUrl string, headerMap map[string]string, method string, pos
 	var err error
 	if postData != nil && (method == "POST" || method == "PUT") {
 		req, err = http.NewRequest(method, targetUrl, bytes.NewReader(postData))
-		req.Header.Set("Content-Type", "application/x-www-form-urlencoded; param=value")
 		if err != nil {
 			return nil, err
 		}
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded; param=value")
+
 	} else {
 		req, err = http.NewRequest(method, targetUrl, nil)
 		if err != nil {
