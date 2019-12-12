@@ -188,6 +188,9 @@ func ReadContentFromResponse(response *http.Response, charset string) (string, e
 	if charset != "" {
 		char = charset
 	}
+	if char == "windows-1252" {
+		char = "GBK"
+	}
 	if data == nil {
 		return "", errors.New("数据为空")
 	}
