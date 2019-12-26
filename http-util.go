@@ -118,6 +118,7 @@ func doRequest(targetUrl string, headerMap map[string]string, method string, pos
 		if err != nil {
 			return nil, err
 		}
+
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded; param=value")
 
 	} else {
@@ -129,7 +130,7 @@ func doRequest(targetUrl string, headerMap map[string]string, method string, pos
 	}
 
 	for key, value := range headerMap {
-		req.Header.Add(key, value)
+		req.Header.Set(key, value)
 	}
 	res, err := client.Do(req)
 	client.CloseIdleConnections()
