@@ -144,7 +144,7 @@ func URLEncode(keyword string) string {
 // 这里他娘的Peek是针对Reader的 针对不了io.Reader 所以 io.Reader其实是进行了位移的
 func detectContentCharset(body io.Reader) (string, *bufio.Reader) {
 	r := bufio.NewReader(body)
-	if data, err := r.Peek(1024); err == nil {
+	if data, err := r.Peek(2048); err == nil {
 
 		if _, name, _ := charset.DetermineEncoding(data, ""); name != "" {
 			if name == "windows-1252" {
