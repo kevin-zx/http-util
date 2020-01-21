@@ -145,7 +145,16 @@ func URLEncode(keyword string) string {
 func detectContentCharset(body io.Reader) (string, *bufio.Reader) {
 	r := bufio.NewReader(body)
 	if data, err := r.Peek(1024); err == nil {
+
 		if _, name, _ := charset.DetermineEncoding(data, ""); name != "" {
+			if name == "windows-1252" {
+				datastr := strings.ToLower(string(data))
+				if strings.Contains(datastr, "charset=utf-8") && !strings.Contains(datastr, `charset=gbk`) {
+					return "utf-8", r
+				} else {
+					return "GBK", r
+				}
+			}
 			return name, r
 		}
 	}
