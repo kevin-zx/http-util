@@ -189,13 +189,13 @@ func ReadContentFromResponse(response *http.Response, charset string) (string, e
 		htmlbytes, err = ioutil.ReadAll(response.Body)
 	}
 	//response.Body = reader
+	//
+	//if response.StatusCode >= 300 || response.StatusCode < 200 {
+	//	return "", errors.New(fmt.Sprintf("状态码为: %d", response.StatusCode))
+	//}
+	header := bytes.NewReader(htmlbytes)
 
-	if response.StatusCode >= 300 || response.StatusCode < 200 {
-		return "", errors.New(fmt.Sprintf("状态码为: %d", response.StatusCode))
-	}
-	hreader := bytes.NewReader(htmlbytes)
-
-	char, data := detectContentCharset(hreader)
+	char, data := detectContentCharset(header)
 	if charset != "" {
 		char = charset
 	}
@@ -212,7 +212,7 @@ func ReadContentFromResponse(response *http.Response, charset string) (string, e
 	}
 	preRd := dec.NewReader(data)
 	preBytes, err := ioutil.ReadAll(preRd)
-	reBytes, err := ioutil.ReadAll(hreader)
+	reBytes, err := ioutil.ReadAll(header)
 	if err != nil {
 		return "", err
 	}
